@@ -1,0 +1,33 @@
+<!-- user/templates/user/partials/social_login_panel.html -->
+
+
+{% load static %}
+
+{% static 'user/img/naver_login_green.png' as naver_button %}
+{% static 'user/img/naver_login_white.png' as naver_button_hover %}
+
+
+  <a href="#" onclick="naverLogin()">
+      <img class="index_login_naver" src="{{ naver_button_hover }}" height="1px">
+  </a>
+
+<script src="{% static 'user/js/social_login.js' %}"></script>
+<style media="screen">
+  .index_login_naver {
+   resize: both;
+   float: center;
+   position: relative;
+   width: 11.375rem;
+   height: auto;
+   margin: 4.625rem 0;
+}
+</style>
+
+
+
+
+<!-- <a href="#" onclick="naverLogin()">
+    <img src="{{ naver_button_hover }}"
+         onmouseover="this.src='{{ naver_button_hover }}'"
+         onmouseleave="this.src='{{ naver_button }}'" height="90px">
+</a> -->

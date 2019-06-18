@@ -1,0 +1,117 @@
+
+
+  <!DOCTYPE html>
+  <html>
+    <head>
+
+      <title>css Sample</title>
+        <script src="https://unpkg.com/vue@2.3.3"></script>
+        <script src="//code.jquery.com/jquery.min.js"></script>
+    </head>
+
+    <body>
+      <!-- ajax csrf 를 위한것 -->
+      <!-- <script>
+             // using jQuery
+              function getCookie(name) {
+                var cookieValue = null;
+                if (document.cookie && document.cookie != '') {
+                  var cookies = document.cookie.split(';');
+                  for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                      cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                      break;
+                    }
+                  }
+                }
+                return cookieValue;
+              }
+              function csrfSafeMethod(method) {
+                // these HTTP methods do not require CSRF protection
+                return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+              }
+              $(document).ready(function() {
+                var csrftoken = getCookie('csrftoken');
+                $.ajaxSetup({
+                  beforeSend: function(xhr, settings) {
+                    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                      xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                    }
+                  }
+                });
+              });
+      </script> -->
+      <!-- ajax csrf 를 위한것 -->
+
+      <!-- <div id="root" class="container">
+        <form id = "root" @submit.prevent = "sendPost">
+          {% csrf_token %}
+          <button>send</button>
+        </form>
+        <p>[[counter]]</p>
+      </div> -->
+    <div id = "root">
+      <div class="one">hello my name is </div>
+      <div class="two" v-bind:style = "{filter : B}">sddddddddddddddddddddddddddddddddddddddddddddddd</div>
+      <button type="button" v-on:click = "B = 'blur(0px)'" name="button"></button>
+      [[B]]
+    </div>
+
+<style>
+.one{
+background-color: #FFF;
+color: #000;
+height: 40px;
+border-bottom: 1px solid #000;
+}
+
+.two{
+/* background-color: red; */
+/* color: #FFF; */
+height: 40px;
+/* -webkit-filter: blur(5px);
+filter: blur(5px); */
+}
+</style>
+
+
+
+
+  <script>
+
+  var app = new Vue({
+    delimiters: ['[[', ']]'],
+    el: '#root',
+    data() {
+      return {
+        counter : 10,
+        B : 'blur(5px)',
+        message : '',
+        ratings : [5,5,2,3,5]
+       }
+     },
+     methods:{
+     sendPost: function () {
+      $.post('/rating/', {
+        choice : JSON.stringify(this.ratings)
+      })
+      .done(function(data) {
+        console.log(data)
+      })
+      .fail(function() {
+        console.log('failed')
+      })
+    }
+  }
+  });
+
+
+  </script>
+
+
+
+    </body>
+
+  </html>

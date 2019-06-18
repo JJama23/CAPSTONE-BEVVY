@@ -1,0 +1,117 @@
+{% load static %}
+{% block css %}
+<link rel="stylesheet" href=" {% static '/css/user.css' %}">
+{% endblock css %}
+
+<!-- <link rel="stylesheet" href=" {% static '/css/user.css' %}"> -->
+{% static 'user/img/rending.jpg' as rending %}
+{% static 'user/img/bevvy_logo.png' as logo %}
+{% static 'user/img/baseline_place_white_48dp.png' as location %}
+
+
+<!doctype>
+<html>
+    <html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport">
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500,700,900">
+    <title>BEVVY</title>
+    <!-- <link rel="stylesheet" href="style.css"> -->
+    <style>
+        @media (max-height:736px) {
+            .index_logobox {
+                margin-top: 5rem;
+            }
+            .index_startbutton {
+                margin: 4rem 0;
+            }
+        }
+        @media (max-height:667px) {
+            .index_logobox {
+                margin-top: 3rem;
+                width: 8rem;
+            }
+            .index_spot {
+                margin-top: 2.5rem;
+            }
+            .index_startbutton {
+                margin: 4rem 0;
+            }
+            }
+        @media (max-height:640px) {
+            .index_logobox {
+                margin-top: 3rem;
+                width: 8rem;
+            }
+            .index_spot {
+                margin-top: 3rem;
+            }
+        }
+        @media (max-height:568px) {
+            .index_logobox {
+                margin-top: 2rem;
+                width: 7rem;
+            }
+            .index_box {
+                font-size: 0.8rem;
+            }
+            .index_spot {
+                margin-top: 2.5rem;
+            }
+            .index_startbutton {
+                margin: 4rem 0;
+            }
+        }
+    </style>
+
+
+
+</head>
+  <body class="index_body">
+          <section class="index_box">
+              <div class="index_bevvy_logo">
+                      <center><img class="index_logobox"; src="{{logo}}";></center>
+              </div>
+              <div class="index_contents">
+                  <p class="index_contents_text1"> 수입맥주 가지수 증가와 수제맥주 시장 성장으로 넘처나는 맥주 브랜드 속에서 베비는 사용자의 취향에 맞는
+                     맥주를 추천해줄 수 있는 맥주추천 서비스입니다!
+                  </p>
+                  <p class="index_contents_text2">
+                  어떤 맥주를 마실지 고민이라면<br>
+                  바로 베비의 추천을 받아보세요!
+                  </p>
+              </div>
+              <div class="index_spot">
+                  <p class="index_spot_contents">
+                      <img class="index_spot_icon" src="{{location}}">
+                      한국
+                  </p>
+              </div>
+
+              <div style="text-align: center;">
+                {% csrf_token %}
+                {% if not request.user.is_authenticated %}
+                {% include 'user/partials/social_login_panel.html' %}
+                {% else %}
+                <!-- <a href="/logout/">로그아웃</a> -->
+                <center>
+                  <div class="index_startbutton">
+                  <p onclick="location.href='/rating/'" class="index_startbutton_text">
+                  나만의 맥주 찾으러 가기
+                  </p>
+                </div></center>
+                {% endif %}
+              </div>
+
+
+          </section>
+
+
+</body>
+</html>
+
+<style>
+
+
+</style>

@@ -18,6 +18,8 @@ from django.conf import settings # 하하 이거였음 settings 값 가져오는
 
 
 
+import collections
+
 ########################################
 
 class MyPageTap(TemplateView):
@@ -101,7 +103,8 @@ class RatingPage(LoginRequiredMixin,TemplateView):
     def post(self, request):
         select = request.POST['choice']
         ratingdata = json.loads(select) # json으로 묶은 파일을 풀러줌
-        beer = [145,247,433,440,686,973,4792,8107,13108,226538] #맥주 데이터 순서를 미리 지정해줘야한다 rating data와 길이 맞춰줘야함
+        # beer = [145,247,433,440,686,973,4792,8107,13108,226538] #맥주 데이터 순서를 미리 지정해줘야한다 rating data와 길이 맞춰줘야함
+        beer = [153,362,393,433,671,742,953,973,1645,1756] #맥주 데이터 순서를 미리 지정해줘야한다 rating data와 길이 맞춰줘야함
         id = request.user.id
 
 
@@ -162,7 +165,8 @@ class RatingPage(LoginRequiredMixin,TemplateView):
             a = []
             #현재 사용자가 평가했던 맥주의 index를 찾아주는거
 
-            beer = [145,247,433,440,686,973,4792,8107,13108,226538] #위에 있던거 잠시만 가져옴
+            # beer = [145,247,433,440,686,973,4792,8107,13108,226538] #위에 있던거 잠시만 가져옴
+            beer = [153,362,393,433,671,742,953,973,1645,1756] #위에 있던거 잠시만 가져옴
             for i in list_userbid:
                 d = 0
                 d = beer.index(i)  #이게 저 리스트수가 안맞아서 그런거 같음
@@ -278,98 +282,58 @@ class ResultPage(LoginRequiredMixin,TemplateView):
 
 
 
+
+## 이쪽을 기반으로 만들기 시작해야함
 class checkdata(TemplateView):
     template_name = 'datatest.html'
 
+    def get(self, request, *args, **kwargs):
+            id = request.user.id
+            queryset = RatingBeer.objects.filter(user_id = id)
+            # test = queryset.values_list('rate',flat =True).order_by('beer_id') # rating 값
+            # beer_review = queryset.values_list('review',flat =True).order_by('beer_id') # Revuew 값
+            test2 = queryset.values_list('beer_id',flat =True).order_by('beer_id')
+            mybeerlist = list(test2)
+            beerinfo = Beer.objects.filter(pk__in = mybeerlist)
+            beername = beerinfo.values_list('style_big',flat = True).order_by('beer_id')
+            #beerurl = beerinfo.values_list('url',flat = True).order_by('beer_id')
+
+            # beer_review = beerinfo.values_list('review',flat = True).order_by('beer_id')
+
+            #이걸 통해서 기본적으로 마신 맥주/ 그리고 각 지금까지 마신 맥주 수/비율
+            b = list(beername)
+            a = set(b) # 이거가 set으로 해서 종류만 딱 알 수 있게해줌
+            c = 32 #총 맥주 수 등록된거
+            d = round(len(b)/32 *100)
+            e = {}
+
+            # 이걸 통해서 스타일이랑 그거 개수를 구할 수 있다
+            for i in a:
+                k = b.count(i)
+                e[i] = k
+
+            #나라
+            country2 = beerinfo.values_list('country',flat = True).order_by('beer_id')
+            countrylist = list(country2)
+            countrycount = collections.Counter(countrylist)
+
+            national = list(countrycount.keys())
+            nationalcount = list(countrycount.values())
+
+            national = national[:3]
+            nationalratio = nationalcount[:3]
+            #생각해보니까 비율은 그냥 전체 내가 마신거에서 특정 국가 개수 로 구하면 되는거잖아 len(b)
+
+            queryset = Beer.objects.filter(country = national[0])
+            test = queryset.values_list('country_url',flat =True).order_by('beer_id') #필요한것만 전송하는것 rating_id순으로 하면 한두개씩 하는경우 문제
 
 
-#이전에 쓰던거
-# def beer_recommend(request) :
-#     a = reco(request)
-#     tmp_beer = []
-#     tmp_rate = []
-#     for i in range(0,3) :
-#         tmp_beer.append(a[i][0])
-#         b = a[i][1]*25
-#         tmp_rate.append(int(b))
-#
-#     beer1 = Beer.objects.get(beer_id = int(tmp_beer[0]))
-#     beer2 = Beer.objects.get(beer_id = int(tmp_beer[1]))
-#     beer3 = Beer.objects.get(beer_id = int(tmp_beer[2]))
-#
-#     ctx = {
-#         'beer1' : beer1,
-#         'beer2' : beer2,
-#         'beer3' : beer3,
-#         'rate1' : tmp_rate[0],
-#         'rate2' : tmp_rate[1],
-#         'rate3' : tmp_rate[2]
-#     }
-#
-#     return render(request, 'result_form.html',ctx)
-
-    # return render(request, 'result_form.html', {'beer1' : beer1,'beer2' : beer2,
-    # 'beer3' : beer3,'rate1' : tmp_rate[0],'rate2' : tmp_rate[1],'rate3' : tmp_rate[2] })
+            ctx = {
+                'beername' : len(b),
+                'persentage' : d,
+                'counter' : e,
+                'country' : national
 
 
-
-
-# def polls(request):
-#     select = request.POST['choice']
-#     ratingdata = json.loads(select)
-#     beer = [1,2,3,4,5]
-#     id = request.user.id
-#
-#     RatingBeer(user_id = id, rate = ratingdata[1],beer_id = beer[1]).save()
-#     return HttpResponse(select)
-
-#
-#     if RatingBeer.objects.filter(user_id = id).first() is None:
-#         for i in range(len(ratingdata)):
-#             if ratingdata[i] == 0:
-#                 pass
-#             else:
-#                 RatingBeer(user_id = id, rate = ratingdata[i], beer_id = beer[i]).save()
-#     else:
-#         user_table = RatingBeer.objects.filter(user_id = id)
-#         for i in range(len(ratingdata)):
-#             if user_table.filter(beer_id = beer[i]).first() is None:
-#                 RatingBeer(user_id = id, rate = ratingdata[i],beer_id = beer[i]).save()
-#             else:
-#                 pickdata = user_table.get(beer_id = beer[i])
-#                 pickdata.rate = ratingdata[i]
-#                 pickdata.save()
-#
-#     return HttpResponse(select)
-
-# class SaveData:
-#     def polls(request):
-#         select = request.POST['choice']
-#         ratingdata = json.loads(select)
-#         beer = [1,2,3,4,5]
-#         id = request.user.id
-#
-#         if RatingBeer.objects.filter(user_id = id).first() is None:
-#             for i in range(len(ratingdata)):
-#                 if ratingdata[i] == 0:
-#                     pass
-#                 else:
-#                     RatingBeer(user_id = id, rate = ratingdata[i], beer_id = beer[i]).save()
-#         else:
-#             user_table = RatingBeer.objects.filter(user_id = id)
-#             for i in range(len(ratingdata)):
-#                 if user_table.filter(beer_id = beer[i]).first() is None:
-#                     RatingBeer(user_id = id, rate = ratingdata[i],beer_id = beer[i]).save()
-#                 else:
-#                     pickdata = user_table.get(beer_id = beer[i])
-#                     pickdata.rate = ratingdata[i]
-#                     pickdata.save()
-#
-#         return HttpResponse(select)
-
-
-#########################################################################
-# 기본으로 템플릿만 보여주는 클레스 뷰
-#########################################################################
-# class RatingPage(TemplateView):
-#     template_name = 'rating_form.html'
+            }
+            return self.render_to_response(ctx)

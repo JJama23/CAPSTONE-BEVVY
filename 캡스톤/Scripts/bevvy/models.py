@@ -123,6 +123,10 @@ class RatingBeer(models.Model):
     beer_name = models.CharField(max_length=45, blank=True, null=True)
     candidate = models.CharField(max_length=45, blank=True, null=True)
     url = models.CharField(max_length=100, blank=True, null=True)
+    style_big = models.CharField(db_column='Style_big', max_length=45, blank=True, null=True)  # Field name made lowercase.
+    abv = models.CharField(db_column='ABV', max_length=45, blank=True, null=True)  # Field name made lowercase.
+    country = models.CharField(db_column='Country', max_length=45, blank=True, null=True)  # Field name made lowercase.
+    country_url = models.CharField(max_length=100, blank=True, null=True)
 
     class Meta:
         managed = False
@@ -147,7 +151,7 @@ class RatingRatingbeer(models.Model):
     user_id = models.IntegerField(blank=True, null=True)
     review = models.CharField(max_length=50, blank=True, null=True)
     beer_id = models.IntegerField(blank=True, null=True)
-    foreign_id_id = models.IntegerField()
+    tap = models.IntegerField(blank=True, null=True)
 
     class Meta:
         managed = False

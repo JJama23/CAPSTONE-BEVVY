@@ -1,0 +1,154 @@
+{% load static %}
+{% block css %}
+<link rel="stylesheet" href=" {% static '/css/rating.css' %}">
+{% endblock css %}
+
+
+<!-- {{request.user.profile_image}}
+<br>
+{{rate}}
+<br>
+{{beername}}
+<br>
+{{beerurl}}
+<br>
+{{beer_review}}
+<br>
+{{totalbeer}}
+<br> -->
+
+
+<!-- <button type="button" name="button" onclick="location.href='/mypage/tap'">탭퍼블릭</button>
+<input type="text" name="sss" value="currentRating"> -->
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Bevvy</title>
+    <meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport">
+    <link href="https://d2rlq84xifqisi.cloudfront.net/stylesheets/web/libs.cdd1fdf79cd6bec30c42.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500,700,900">
+    <!-- vue rating  -->
+    <script src="https://unpkg.com/vue@2.3.3"></script>
+    <script src="https://unpkg.com/vue-star-rating/dist/star-rating.min.js"></script>
+  </head>
+  <body class="frame_body">
+
+    <div class = "mypage_center">
+      <!-- 요거 위에는 내가만든거  -->
+    <div id="example">
+    <header class="mypage_header">
+            <div class="mypage_header_box">
+                <div class="mypage_header_profilebox">
+                    <div class="mypage_header_profilephoto" style = "background-image: url({{request.user.profile_image}})"></div>
+                    <p class="mypage_header_profileid">프로필</p>
+                </div>
+                <div class="mypage_header_statusbox">
+                    <span class="mypage_header_statusbox_text1">
+                    마신 맥주 <span class="mypage_header_statusbox_number">^^totalbeer^^</span> 개
+                    </span>
+                    <!-- <span class="mypage_header_statusbox_text1">
+                    마신 맥주&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;개
+                    </span>
+                    <span class="mypage_header_statusbox_number">
+                    ^^totalbeer^^
+                    </span> -->
+                    <p class="mypage_header_statusbox_text2">
+                    혹시 아직 맥린이세요?
+                    </p>
+                </div>
+            </div>
+        </header>
+
+        <section>
+            <div class="mypage_section_textbox">
+                <div class="mypage_section_textbox_L">
+                    <span class="mypage_section_textbox_L_title">최근 마신 맥주</span>
+                </div>
+                <div class="mypage_section_textbox_R">
+                    <span class="mypage_section_textbox_R_all"onclick="location.href='/mypage/'">전체</span>
+                    <!-- <span class="mypage_section_textbox_R_store_1" onclick="location.href='/mypage/tap'">탭퍼플릭</span> -->
+                </div>
+
+                <div v-for="i in totalbeer">
+                <div class="mypage_section_historybox">
+                    <div class="mypage_section_historybox_c_1">
+                        <div class="mypage_section_historybox_c_1_contents">
+
+                            <div  v-bind:style = "{ backgroundImage : 'url('+ '&quot;' + beerurl[i-1] + '&quot;'+ ')' }" class="mypage_section_historybox_c_1_contents_thumb">
+                            </div>
+                            <div class="mypage_section_historybox_c_1_contents_infobox">
+                                <p class="mypage_section_historybox_c_1_contents_infobox_check">
+                                0000년 00월 00일 탭퍼플릭
+                                </p>
+                                <p class="mypage_section_historybox_c_1_contents_infobox_beername">
+                                ^^beername[i-1]^^
+                                </p>
+                                <p class="mypage_section_historybox_c_1_contents_infobox_rating" style="margin-top: 5px;  margin-bottom: 10px">
+                                  <star-rating v-model = "rate[i-1]" :increment="0.5" :show-rating ="false" :star-size = "25" inactive-color = "#ffffff" :rounded-corners = "true" :read-only ="true">
+                                </p>
+
+                                <p class="mypage_section_historybox_c_1_contents_infobox_sreview">
+                                한줄리뷰
+                                </p>
+                                <div class="mypage_section_historybox_c_1_contents_infobox_sreviewbox">
+                                  <div style = "color: #000000">^^beer_review[i-1]^^</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                </div>
+
+            </div>
+        </section>
+
+
+</div>
+
+    <!-- <div v-for="i in 4">
+      <star-rating v-model = "rating" :increment="0.5" :show-rating ="false">
+    </div> -->
+
+
+
+
+  </div>
+  {% include 'partials/footer_form.html' %}
+</body>
+
+<script>
+  Vue.component('star-rating', VueStarRating.default)
+  new Vue({
+    delimiters: ['^^', '^^'],
+    el: '#example',
+    data: {
+      rating : 0,
+      totalbeer: {{totalbeer}},
+      rate : {{rate|safe}},
+      beerurl: {{beerurl|safe}},
+      beername: {{beername|safe}},
+      beer_review: {{beer_review|striptags|safe}}
+    },
+    methods: {
+      incremethod(){
+        this.basicnum = this.basicnum + 1
+        return this.basicnum
+      }
+    },
+    computed: {
+      plus: function(){
+        this.basicnum = this.basicnum + 1
+        return this.basicnum
+      }
+
+    },
+  });
+</script>
+
+
+
+
+</html>

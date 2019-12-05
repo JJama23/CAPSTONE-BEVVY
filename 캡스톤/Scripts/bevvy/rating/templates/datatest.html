@@ -1,0 +1,356 @@
+{% load static %}
+{% block css %}
+<link rel="stylesheet" href=" {% static '/css/rating.css' %}">
+{% endblock css %}
+
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Bevvy</title>
+    <meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport">
+    <link href="https://d2rlq84xifqisi.cloudfront.net/stylesheets/web/libs.cdd1fdf79cd6bec30c42.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500,700,900">
+    <!-- vue rating  -->
+    <script src="https://unpkg.com/vue@2.3.3"></script>
+    <!-- <script src="https://unpkg.com/vue-star-rating/dist/star-rating.min.js"></script> -->
+
+    <!-- 차트 -->
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+
+    <!-- jquery를 통한거 -->
+    <link href="http://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+
+
+    <!-- guage 차트 -->
+    <script src="https://d3js.org/d3.v3.min.js" language="JavaScript"></script>
+    <script src="/static/js/front.js" language="JavaScript"></script>
+
+      <style media="screen">
+          ul{
+            margin:0;
+            padding:0;
+          }
+          .box_section_2{
+            padding-top : 20px;
+            padding-bottom : 20px;
+            position: relative;
+            background-color: #231F20;
+            border-radius: 0.375rem;
+            height : 300px;
+            width: 20.886875rem;
+            box-shadow: 0px 3px 9px #000000;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 1rem;
+            margin-top: 1rem;
+          }
+
+          .chart{
+            margin-left : 10px;
+            margin-right : 10px;
+          }
+          .frame_country{
+            position: relative;
+            background-color: #231F20;
+            border-radius: 0.375rem;
+            height: 8.744375rem;
+            width: 40%;
+            float : left;
+            margin-left : 8%;
+            box-shadow: 0px 3px 9px #000000;
+
+          }
+          .frame_country_two{
+            position: relative;
+
+            background-color: #231F20;
+            border-radius: 0.375rem;
+            height: 8.744375rem;
+            width: 40%;
+            float : right;
+            box-shadow: 0px 3px 9px #000000;
+            margin-right : 8%;
+          }
+
+
+
+
+          /* 나라 */
+          .main_image{
+            width : 30%;
+            height : 100px;
+            border-radius: 2.6875rem;
+            position :relative;
+            display : inline-block;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            margin-left : 1%;
+            margin-right : 1rem;
+            float: left;
+          }
+          .rating_img{
+            float : left;
+            margin-top : 25px
+          }
+          .rating_country_text{
+            color : white;
+          }
+          .rating_country_text_main{
+            font-weight: 1000;
+            color : white;
+          }
+          .text_section{
+            padding-top : 19px;
+            text-align : left;
+          }
+
+          .rating_country{
+            padding-left : 13%;
+          }
+          .section_middle{
+            height : 30px;
+          }
+
+          /* guage */
+
+          .liquidFillGaugeText { font-family: Helvetica; font-weight: bold; }
+          #fillgauge1 {
+            float : left;
+            padding-top : 20px;
+            padding-left : 30px;
+          }
+
+          .guage_text_1{
+            font-size : 30px;
+            font-weight: 1000;
+          }
+          .guage_text_section{
+            padding-top:10px;
+            padding-right : 20px;
+          }
+          .guage_profile_text{
+            z-index: 21;
+            position: relative;
+            text-align: center;
+            margin-top: 0px;
+            margin-bottom: 0px;
+            font-size: 1.0625rem;
+            font-weight: 400;
+            top: 0.4rem;
+            right: 1.7rem;
+          }
+
+          .mypage_header_statusbox{
+            padding-left : 8%;
+            padding-top : 10px;
+          }
+          .panel-body { background-color:#fafafa;}
+      </style>
+
+      <script src="/static/js/hBarChart.js"></script>
+      <script src="/static/js/script.js"></script>
+      <script type="text/javascript" src="http://pagead2.googlesyndication.com/pagead/show_ads.js"></script>
+
+
+  </head>
+  <body class="frame_body">
+    <div class = "mypage_center">
+      <!-- 요거 위에는 내가만든거  -->
+
+    <div id="example">
+      <!-- <h1>^^country^^</h1> -->
+        <header class="mypage_header">
+            <div class="mypage_header_box">
+                <div class="mypage_header_profilebox">
+                    <div class="mypage_header_profilephoto" style = "background-image: url({{request.user.profile_image}})"></div>
+                    <p class="mypage_header_profileid">프로필</p>
+                </div>
+                <div class="mypage_header_statusbox">
+                    <p class="guage_profile_text">
+                    내가 <span style = "font-weight : 1000;">어떤</span> <br><br> 맥주 스타일을 가졌을까요?
+                    </p>
+                </div>
+            </div>
+        </header>
+
+        <section>
+          <div class="mypage_section_textbox">
+            <div class="mypage_section_textbox_L">
+                <span class="mypage_section_textbox_L_title">나의 맥주 경험치</span>
+            </div>
+
+            <div class="mypage_section_historybox">
+                <div class="mypage_section_historybox_c_1">
+                  <svg id="fillgauge1" width="30%" height="100"></svg>
+                  <div class="guage_text_section">
+                    <span class = "rating_country_text">현재까지 마신 맥주 종류</span> <br>
+                    <span class = "guage_text_1">^^my_beer^^</span> <span class = "rating_country_text">가지</span> <br>
+                    <br>
+                    <span class = "rating_country_text">남아 있는 맥주 종류</span> <br>
+                    <span class = "guage_text_1">^^total_beer^^</span> <span class = "rating_country_text">가지</span> <br>
+                  </div>
+                </div>
+            </div>
+          </div>
+
+
+            <div class="mypage_section_textbox">
+                <div class="mypage_section_textbox_L">
+                    <span class="mypage_section_textbox_L_title">나의 맥주 취향 분포</span>
+                </div>
+
+                <div class="mypage_section_historybox">
+                    <div class="mypage_section_historybox_c_1">
+                        <ul class="chart" >
+                          <!-- <div v-for = "(value,key) in example">
+                              <li v-bind:data-data = "value"> ^^key^^</li>
+                          </div> -->
+                          <div v-for = "i,k in counter">
+                              <li v-bind:data-data = "i"> ^^k^^</li>
+                          </div>
+                        </ul>
+
+                      <!-- <ul class="chart">
+                        <li data-data="3">
+                            Lager
+                        </li>
+                        <li data-data="10">
+                            IPA
+                        </li>
+                        <li data-data="30">
+                            pale ale
+                        </li>
+                        <li data-data="2">
+                            stout
+                        </li>
+                        <li data-data="1">
+                            korea
+                        </li>
+                      </ul> -->
+
+                    </div>
+                </div>
+            </div>
+        <!-- </section> -->
+
+
+
+        <div class="mypage_section_textbox">
+            <div class="mypage_section_textbox_L">
+                <span class="mypage_section_textbox_L_title">나의 맥주 선호 국가</span>
+            </div>
+        </div>
+
+
+        <div class="box_section_2">
+          <div class="rating_country">
+            <img src="/static/img/gold-medal.png" class = "rating_img" width = "50px">
+            <div class="main_image" style = "background-image: url(/static/img/한국.png);"></div>
+            <div class="text_section">
+              <span class = "rating_country_text_main">한국 Korea</span> <br>
+              <span class = "rating_country_text">비율 30%</span> <br>
+              <span class = "rating_country_text">스타일 Lager</span>
+            </div>
+          </div>
+
+          <div class="section_middle"></div>
+
+          <div class="rating_country">
+            <img src="/static/img/silver-medal.png" class = "rating_img" width = "50px">
+            <div class="main_image" style = "background-image: url(/static/img/일본.png);"></div>
+            <div class="text_section">
+              <span class = "rating_country_text_main">일본 Japan</span> <br>
+              <span class = "rating_country_text">비율 20%</span> <br>
+              <span class = "rating_country_text">스타일 Lager</span>
+            </div>
+          </div>
+
+          <div class="section_middle"></div>
+
+          <div class="rating_country">
+            <img src="/static/img/bronze-medal.png" class = "rating_img" width = "50px">
+            <div class="main_image" style = "background-image: url(/static/img/인도.png);"></div>
+            <div class="text_section">
+              <span class = "rating_country_text_main">인도 India</span> <br>
+              <span class = "rating_country_text">비율 10%</span> <br>
+              <span class = "rating_country_text">스타일 IPA</span>
+            </div>
+          </div>
+        </div>
+
+      </section>
+    </div>
+
+  </div>
+  {% include 'partials/footer_form.html' %}
+</body>
+
+
+
+<script>
+new Vue({
+    delimiters: ['^^', '^^'],
+    el: '#example',
+    data: {
+      my_beer : {{beername|safe}},
+      total_beer : 32,
+      test : {{persentage|safe}},
+      test2 : "2",
+      example : {"stout" : 1, "IPA" : 2, "Lager" : 3, "pale ale" : 5},
+      counter : {{counter|safe}},
+      country : {{country|safe}}
+
+
+    },
+    methods: {
+      incremethod(){
+        this.basicnum = this.basicnum + 1
+        return this.basicnum
+      }
+    },
+    computed: {
+      plus: function(){
+        this.basicnum = this.basicnum + 1
+        return this.basicnum
+      }
+
+    },
+  });
+</script>
+
+
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-36251023-1']);
+  _gaq.push(['_setDomainName', 'jqueryscript.net']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+
+  var getpercentage = {{persentage|safe}};
+// guage
+  var config1 = liquidFillGaugeDefaultSettings();
+    config1.circleColor = "#D4AB6A";
+    config1.textColor = "#553300";
+    config1.waveTextColor = "#805615";
+    config1.waveColor = "#AA7D39";
+    config1.circleThickness = 0.1;
+    config1.circleFillGap = 0.2;
+    config1.textVertPosition = 0.8;
+    config1.waveAnimateTime = 2000;
+    config1.waveHeight = 0.3;
+    config1.waveCount = 1;
+    var gauge1 = loadLiquidFillGauge("fillgauge1", getpercentage ,config1);
+</script>
+
+
+</html>
